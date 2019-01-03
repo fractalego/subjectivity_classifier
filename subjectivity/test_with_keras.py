@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     for i in range(0, 10):
         print('Epoch:', i)
-        nn_model = tf.keras.models.load_model(os.path.join(_saving_dir, 'subj-' + str(i) + '.tf'))
+        nn_model = tf.keras.models.load_model(os.path.join(_saving_dir, 'subj-keras-' + str(i) + '.tf'))
         result = test(data, nn_model)
         print('precision', result['precision'])
         print('recall', result['recall'])

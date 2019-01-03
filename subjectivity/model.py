@@ -85,11 +85,6 @@ class SubjectivityPredictor(object):
             self.merged = tf.summary.merge_all()
             self.train_writer = tf.summary.FileWriter('./tf_train', self.sess.graph)
 
-    def _add_identity(self, A):
-        num_nodes = A.shape[0]
-        identity = np.identity(num_nodes)
-        return identity + A
-
     def __train(self, sentence_vectors, y):
         sentence_vectors = np.array(sentence_vectors)
         sentence_vectors_fw = np.transpose(sentence_vectors, (1, 0, 2))

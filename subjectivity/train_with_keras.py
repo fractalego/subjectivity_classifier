@@ -1,14 +1,11 @@
 import os
-import random
-import numpy as np
 
 from gensim.models import KeyedVectors
 
+from subjectivity.data_generator import DataGenerator
 from subjectivity.keras_model import get_keras_model
-from subjectivity.model import SubjectivityPredictor
-from subjectivity.utils import bin_data_into_buckets, get_data_from_list
+from subjectivity.utils import get_data_from_list
 from subjectivity.utils import is_objective, is_subjective
-
 
 _bucket_size = 10
 _path = os.path.dirname(__file__)
@@ -20,30 +17,16 @@ _objective_filename = os.path.join(_path, '../data/subj_dataset/objective_cv_tra
 _model = KeyedVectors.load_word2vec_format(os.path.join(_path, '../data/word_embeddings/glove.6B.50d.txt'))
 
 
-def train(data, model, saving_dir, epochs=20, bucket_size=10, trace_every=None):
+def train(model, generator, saving_dir, epochs=20, trace_every=None):
     import sys
 
-    buckets = bin_data_into_buckets(data, bucket_size)
     for i in range(epochs):
-        random_buckets = sorted(buckets, key=lambda x: random.random())
         if trace_every:
             sys.stderr.write('--------- Epoch ' + str(i) + ' ---------\n')
-        for bucket in random_buckets:
-            training_bucket = []
-            for item in bucket:
-                try:
-                    sentence_vectors = item['sentence_vectors']
-                    y = item['classification']
-                    training_bucket.append((sentence_vectors, y))
-                except Exception as e:
-                    print('Exception caught during training: ' + str(e))
-            if len(training_bucket) > 0:
-                items = list(zip(*training_bucket))
-                data = np.array(items[:-1])[0]
-                labels = np.array(items[-1])
-                model.train_on_batch(data, labels)
+
+        model.fit_generator(generator=generator, epochs=1, verbose=1)
         if trace_every and i % trace_every == 0:
-            save_filename = saving_dir + '/subj-' + str(i) + '.tf'
+            save_filename = saving_dir + '/subj-keras-' + str(i) + '.tf'
             sys.stderr.write('Saving into ' + save_filename + '\n')
             model.save(save_filename)
 
@@ -51,7 +34,7 @@ def train(data, model, saving_dir, epochs=20, bucket_size=10, trace_every=None):
 if __name__ == '__main__':
     data = get_data_from_list(open(_objective_filename, encoding="ISO-8859-1").readlines(), is_objective, _model)
     data += get_data_from_list(open(_subjective_filename, encoding="ISO-8859-1").readlines(), is_subjective, _model)
-    data = sorted(data, key=lambda x: random.random())
-
+    generator = DataGenerator(data, batch_size=20)
     nn_model = get_keras_model(dropout=0.7)
-    train(data, nn_model, _saving_dir, epochs=39, bucket_size=10, trace_every=1)
+
+    train(nn_model, generator, _saving_dir, epochs=39, trace_every=1)

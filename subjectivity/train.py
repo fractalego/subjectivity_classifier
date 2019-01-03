@@ -2,6 +2,7 @@ import os
 import random
 
 from gensim.models import KeyedVectors
+
 from subjectivity.model import SubjectivityPredictor
 from subjectivity.utils import bin_data_into_buckets, get_data_from_list
 from subjectivity.utils import is_objective, is_subjective

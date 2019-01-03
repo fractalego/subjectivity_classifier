@@ -19,7 +19,8 @@ def get_keras_model(dropout):
     ])
 
     model.compile(optimizer=keras.optimizers.Adam(1e-4),
-                  loss='binary_crossentropy')
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
     print(model.summary())
     return model
 

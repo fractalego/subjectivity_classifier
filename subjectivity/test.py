@@ -52,7 +52,7 @@ if __name__ == '__main__':
     data += get_data_from_list(open(_subjective_filename, encoding="ISO-8859-1").readlines(), is_subjective, _model)
     data = sorted(data, key=lambda x: random.random())
 
-    for i in range(29, 30):
+    for i in range(0, 10):
         print('Epoch:', i)
         nn_model = SubjectivityPredictor.load(os.path.join(_saving_dir, 'subj-' + str(i) + '.tf'))
         result = test(data, nn_model)
