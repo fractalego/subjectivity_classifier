@@ -1,6 +1,6 @@
 tensorflow-gpu==1.12.0
-numpy
-gensim==3.0.0
-nltk
-jupyter
-matplotlib
+numpy==1.19.4
+gensim==3.5.0
+nltk==3.5
+jupyter==1.0.0
+matplotlib==3.3.2
