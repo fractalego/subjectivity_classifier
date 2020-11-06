@@ -7,6 +7,7 @@ RUN git clone https://github.com/fractalego/subjectivity_classifier.git
 RUN cd subjectivity_classifier && pip install -r requirements.txt
 # Download Dataset
 RUN cd subjectivity_classifier/data/word_embeddings/ && wget -nc -O glove.6B.50d.txt http://nlulite.com/download/glove
+RUN python -m nltk.downloader 'punkt'
 #Set the workdir
 WORKDIR /subjectivity_classifier
 #Command line usage: docker run <container-id> <any text>

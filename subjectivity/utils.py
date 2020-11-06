@@ -1,5 +1,4 @@
 import nltk
-nltk.download('punkt')
 
 import gensim.utils as utils
 
