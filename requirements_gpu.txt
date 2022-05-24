@@ -1,4 +1,4 @@
-tensorflow-gpu==1.12.0
+tensorflow-gpu==2.6.4
 numpy==1.19.4
 gensim==3.5.0
 nltk==3.5
